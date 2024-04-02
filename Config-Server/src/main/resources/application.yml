@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: CONFIG-SERVER
+  cloud:
+    config:
+      server:
+        bootstrap: true
+        git:
+          uri: https://github.com/ReshankKumar/MicroService-Config-Server
+          clone-on-start: true
+          # Optionally, you may add other configurations here such as username, password, search-paths, etc.
+
+server:
+  port: 8084

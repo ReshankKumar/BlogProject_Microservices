@@ -1,0 +1,66 @@
+
+spring:
+  application:
+   name: POST-SERVICE
+  config:
+    import: configserver:http://localhost:8084
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/postdb
+    username: root
+    password: test
+
+  jpa:
+    hibernate:
+     ddl-auto: update
+    show-sql: true
+    properties:
+     hibernate:
+     dialect: org.hibernate.dialect.MySQL8Dialect
+server:
+  port: 8081
+
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
+
+
+
+
+management:
+  health:
+    circuitbreakers:
+      enable: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      commentBreaker:
+        # Register with health indicator.
+        registerHealthIndicator: true
+        # Event consumer buffer size.
+        eventConsumerBufferSize: 10
+        # Minimum number of calls to open the circuit.
+        minimumNumberOfCalls: 5
+        # Enable automatic transition from OPEN to HALF_OPEN state.
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        # Wait duration in OPEN state.
+        waitDurationInOpenState: 6s
+        # Permitted number of calls in HALF_OPEN state.
+        permittedNumberOfCallsInHalfOpenState: 3
+        # Sliding window size.
+        slidingWindowSize: 10
+        # Sliding window type.
+        slidingWindowType: COUNT_BASED
